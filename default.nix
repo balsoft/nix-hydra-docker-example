@@ -8,12 +8,17 @@ in
     inherit nixpkgsArgs supportedSystems;
   } }:
 pkgs.lib.genAttrs supportedSystems
-(system: { 
+(system: rec { 
   mc = (releaseLib.pkgsFor system).mc; 
   docker.mc = pkgs.dockerTools.buildImage {
     name = "mc";
     contents = with pkgs; [stdenv coreutils bash mc];
     config = { Cmd = [ "/bin/bash" ]; };
   };
+  activator = pkgs.writeScriptBin "activate" ''
+    cat /etc/docker_password | ${pkgs.docker}/bin/docker login -u balsoft --password-stdin
+    ${pkgs.docker}/bin/docker import ${docker.mc} hub.docker.com/balsoft/nix-hydra-docker-example:${mc.version}
+    ${pkgs.docker}/bin/docker push hub.docker.com/balsoft/nix-hydra-docker-example
+  '';
 })
 
