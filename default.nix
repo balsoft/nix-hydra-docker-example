@@ -17,8 +17,8 @@ pkgs.lib.genAttrs supportedSystems
   };
   activator = pkgs.writeScriptBin "activate" ''
     cat /etc/docker_password | ${pkgs.docker}/bin/docker login -u balsoft --password-stdin
-    ${pkgs.docker}/bin/docker import ${docker.mc} hub.docker.com/balsoft/nix-hydra-docker-example:${mc.version}
-    ${pkgs.docker}/bin/docker push hub.docker.com/balsoft/nix-hydra-docker-example
+    ${pkgs.docker}/bin/docker import ${docker.mc} balsoft/nix-hydra-docker-example:${mc.version}
+    ${pkgs.docker}/bin/docker push balsoft/nix-hydra-docker-example:${mc.version}
   '';
 })
 
