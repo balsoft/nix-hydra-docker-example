@@ -8,5 +8,12 @@ in
     inherit nixpkgsArgs supportedSystems;
   } }:
 pkgs.lib.genAttrs supportedSystems
-(system: { mc = (releaseLib.pkgsFor system).mc; })
+(system: { 
+  mc = (releaseLib.pkgsFor system).mc; 
+  docker.mc = pkgs.dockerTools {
+    name = "mc";
+    contents = with pkgs; [stdenv coreutils bash mc];
+    config = { Cmd = [ "/bin/bash" ]; };
+  };
+})
 
